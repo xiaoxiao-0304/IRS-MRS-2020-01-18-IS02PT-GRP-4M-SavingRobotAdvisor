@@ -13,6 +13,10 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import {AccountBalance, CreditCard, MonetizationOn} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import {compareProducts} from "./resultsManager";
 
 const drawerWidth = 275;
 
@@ -50,24 +54,47 @@ const useStyles = makeStyles(theme => ({
     form: {
         margin: theme.spacing(2),
     },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
 }));
 
-const initialList = [
-    {
-        id: 'uob_one',
-        bank: 'UOB',
-        interest: 60,
-        interest_rate: 2.1,
-        cashback: 70,
-    },
-    {
-        id: 'ocbc_360',
-        bank: 'OCBC',
-        interest: 70,
-        interest_rate: 2.3,
-        cashback: 80,
-    },
-];
+const initialList = [];
+
+export function SimpleCard(props) {
+    const classes = useStyles();
+
+    return (
+        <Card className={classes.root}>
+            <CardContent>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Bank: {props.bank}
+                </Typography>
+                <Typography variant="h5" component="h2">
+                    ${props.combined}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                    Savings interest: ${props.interest} ({props.interest_rate}%)<br/>
+                    Credit cashback: ${props.cashback} ({props.cashback_rate}%)<br/>
+                </Typography>
+                <Typography variant="body2" component="p">
+                    Bank and CC description
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small">Learn More</Button>
+            </CardActions>
+        </Card>
+    );
+}
 
 function ResponsiveDrawer(props) {
     const [income, setIncome] = React.useState('');
@@ -111,17 +138,8 @@ function ResponsiveDrawer(props) {
         }
         setSavings(event.target.value);
     };
-    const compareProducts = event => {
-        if (income && expense && savings) {
-            setResults(results.concat({
-                id: 'ocbc_360',
-                bank: 'OCBC',
-                interest: 70,
-                interest_rate: 2.3,
-                cashback: 80,
-            }));
-        }
-
+    const compareButtonClick = event => {
+        setResults(compareProducts(income,expense,savings));
         event.preventDefault();
     };
 
@@ -194,7 +212,7 @@ function ResponsiveDrawer(props) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button onClick={compareProducts} variant="contained" color="primary">
+                    <Button onClick={compareButtonClick} variant="contained" color="primary">
                         Compare Banks
                     </Button>
                 </Grid>
@@ -263,16 +281,20 @@ function ResponsiveDrawer(props) {
                     </ul>
                     based on your net salary, credit card expenses, and cash savings.
                 </Typography>
-                <ul>
+
+
                     {results.map(item => (
-                        <li key={item.id}>
-                            <div>Bank: {item.bank}</div>
-                            <div>Combined: ${item.interest + item.cashback}</div>
-                            <div>Savings interest: ${item.interest} ({item.interest_rate}%)</div>
-                            <div>Credit cashback: ${item.cashback}</div>
-                        </li>
+
+                            <SimpleCard bank={item.bank}
+                                        combined={item.interest + item.cashback}
+                                        interest={item.interest}
+                                        interest_rate={item.interest_rate}
+                                        cashback={item.cashback}
+                                        cashback_rate={item.cashback_rate}
+                            />
+
                     ))}
-                </ul>
+
 
             </main>
         </div>
