@@ -1,5 +1,6 @@
-export function ocbc_everyday(income,expense,savings) {
+export function ocbc_360(income,expense,savings) {
     return {id: 'ocbc_360',
+        image:'/credit_ocbc_365.png',
         bank: 'OCBC',
         interest: 123.45,
         interest_rate: 2.3,

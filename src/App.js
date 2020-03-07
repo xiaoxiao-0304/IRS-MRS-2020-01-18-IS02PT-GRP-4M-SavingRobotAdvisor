@@ -75,6 +75,9 @@ export function SimpleCard(props) {
     return (
         <Card className={classes.root}>
             <CardContent>
+                <img src={process.env.PUBLIC_URL + props.image} />
+            </CardContent>
+            <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Bank: {props.bank}
                 </Typography>
@@ -88,9 +91,10 @@ export function SimpleCard(props) {
                 <Typography variant="body2" component="p">
                     Bank and CC description
                 </Typography>
+                <Button size="small">Learn More</Button>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+
             </CardActions>
         </Card>
     );
@@ -145,7 +149,7 @@ function ResponsiveDrawer(props) {
 
     const drawer = (
 
-        <form className={classes.form} onSubmit={compareProducts} autoComplete="off">
+        <form className={classes.form} onSubmit={compareButtonClick} autoComplete="off">
             <Grid
                 container
                 spacing={16}
@@ -286,6 +290,7 @@ function ResponsiveDrawer(props) {
                     {results.map(item => (
 
                             <SimpleCard bank={item.bank}
+                                        image={item.image}
                                         combined={item.interest + item.cashback}
                                         interest={item.interest}
                                         interest_rate={item.interest_rate}

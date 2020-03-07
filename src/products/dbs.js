@@ -1,5 +1,6 @@
-export function dbs_everyday(income,expense,savings) {
-    return {id: 'dbs_everyday',
+export function dbs_multiplier(income,expense,savings) {
+    return {id: 'dbs_multiplier',
+        image:'/credit_posb_everyday.png',
         bank: 'DBS',
         interest: 234.56,
         interest_rate: 3.1,
